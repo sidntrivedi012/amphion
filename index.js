@@ -1,5 +1,7 @@
 const uploadedimage = document.getElementById("imageUpload");
-console.log(faceapi.nets);
+var data = [];
+var obj = {};
+// console.log(obj[0]);
 
 Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
@@ -20,20 +22,42 @@ async function hello() {
       .withFaceExpressions()
       .withAgeAndGender()
       .withFaceDescriptors();
-    // console.log(result[0]);
 
-    // console.log(result[0].age);
-    // console.log(result[0].gender);
-    let arr = Object.values(result[0].expressions);
-    let max = Math.max(...arr);
-    if (max == result[0].expressions.angry) express = "Angry";
-    else if (max == result[0].expressions.disgusted) express = "Disgusted";
-    else if (max == result[0].expressions.fearful) express = "Fearful";
-    else if (max == result[0].expressions.happy) express = "Happy";
-    else if (max == result[0].expressions.neutral) express = "Neutral";
-    else if (max == result[0].expressions.sad) express = "Sad";
-    else if (max == result[0].expressions.surprised) express = "Surprised";
-    // console.log(express);
     document.body.append(result.length);
+    console.log(result);
+
+    for (let i = 0; i < result.length; i++) {
+      let arr = Object.values(result[i].expressions);
+      let max = Math.max(...arr);
+      if (max == result[i].expressions.angry) express = "Angry";
+      else if (max == result[i].expressions.disgusted) express = "Disgusted";
+      else if (max == result[i].expressions.fearful) express = "Fearful";
+      else if (max == result[i].expressions.happy) express = "Happy";
+      else if (max == result[i].expressions.neutral) express = "Neutral";
+      else if (max == result[i].expressions.sad) express = "Sad";
+      else if (max == result[i].expressions.surprised) express = "Surprised";
+
+      obj.emotion = express;
+      obj.age = result[i].age;
+      obj.sex = result[i].gender;
+
+      await data.push(obj);
+      console.log(obj);
+    }
+    console.log(data);
   });
 }
+// [{
+//     1: {
+//         imageBase64: '',
+//         emotion: '',
+//         age: '',
+//         sex: ''
+//     },
+//     2: {
+//         imageBase64: '',
+//         emotion: '',
+//         age: '',
+//         sex: ''
+//     }
+// }]
