@@ -20,9 +20,4 @@ async function hello() {
 
     document.body.append(result.length);
   });
-
-  //   const displaySize = { width: input.width, height: input.height };
-  //   // resize the overlay canvas to the input dimensions
-  //   const canvas = document.getElementById("overlay");
-  //   faceapi.matchDimensions(canvas, displaySize);
 }
