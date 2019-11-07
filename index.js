@@ -27,7 +27,7 @@ async function hello() {
       .withFaceDescriptors();
 
     document.body.append(result.length);
-    console.log(result);
+    // console.log(result);
 
     for (let i = 0; i < result.length; i++) {
       let arr = Object.values(result[i].expressions);
