@@ -1,7 +1,10 @@
 const uploadedimage = document.getElementById("imageUpload");
 var data = [];
-var obj = {};
-// console.log(obj[0]);
+function obj(emotion, age, sex) {
+  this.emotion = emotion;
+  this.age = age;
+  this.sex = sex;
+}
 
 Promise.all([
   faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
@@ -37,27 +40,9 @@ async function hello() {
       else if (max == result[i].expressions.sad) express = "Sad";
       else if (max == result[i].expressions.surprised) express = "Surprised";
 
-      obj.emotion = express;
-      obj.age = result[i].age;
-      obj.sex = result[i].gender;
-
-      await data.push(obj);
-      console.log(obj);
+      var obj1 = new obj(express, result[i].age, result[i].gender);
+      const len = data.push(obj1);
     }
     console.log(data);
   });
 }
-// [{
-//     1: {
-//         imageBase64: '',
-//         emotion: '',
-//         age: '',
-//         sex: ''
-//     },
-//     2: {
-//         imageBase64: '',
-//         emotion: '',
-//         age: '',
-//         sex: ''
-//     }
-// }]
