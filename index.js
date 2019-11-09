@@ -1,6 +1,8 @@
 const uploadedimage = document.getElementById("imageUpload");
 var data = [];
-function obj(emotion, age, sex) {
+
+function obj(imageObject, emotion, age, sex) {
+  this.imageObject = imageObject;
   this.emotion = emotion;
   this.age = age;
   this.sex = sex;
@@ -12,10 +14,10 @@ Promise.all([
   faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
   faceapi.nets.ageGenderNet.loadFromUri("/models"),
   faceapi.nets.faceExpressionNet.loadFromUri("/models")
-]).then(hello);
+]).then(detectFaces);
 
-async function hello() {
-  document.body.append("Hello");
+async function detectFaces() {
+  document.body.append("Loaded the models. Please upload the file.");
   uploadedimage.addEventListener("change", async () => {
     const image = await faceapi.bufferToImage(uploadedimage.files[0]);
 
@@ -26,10 +28,10 @@ async function hello() {
       .withAgeAndGender()
       .withFaceDescriptors();
 
-    document.body.append(result.length);
-    // console.log(result);
+    console.log(result);
 
     for (let i = 0; i < result.length; i++) {
+      const imageObject = result[i].detection;
       let arr = Object.values(result[i].expressions);
       let max = Math.max(...arr);
       if (max == result[i].expressions.angry) express = "Angry";
@@ -40,7 +42,7 @@ async function hello() {
       else if (max == result[i].expressions.sad) express = "Sad";
       else if (max == result[i].expressions.surprised) express = "Surprised";
 
-      var obj1 = new obj(express, result[i].age, result[i].gender);
+      var obj1 = new obj(imageObject, express, result[i].age, result[i].gender);
       const len = data.push(obj1);
     }
     console.log(data);
