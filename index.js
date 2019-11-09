@@ -19,6 +19,7 @@ Promise.all([
 async function detectFaces() {
   document.body.append("Loaded the models. Please upload the file.");
   uploadedimage.addEventListener("change", async () => {
+    // create an HTMLImageElement from a Blob
     const image = await faceapi.bufferToImage(uploadedimage.files[0]);
 
     const result = await faceapi
@@ -34,13 +35,32 @@ async function detectFaces() {
       const imageObject = result[i].detection;
       let arr = Object.values(result[i].expressions);
       let max = Math.max(...arr);
-      if (max == result[i].expressions.angry) express = "Angry";
-      else if (max == result[i].expressions.disgusted) express = "Disgusted";
-      else if (max == result[i].expressions.fearful) express = "Fearful";
-      else if (max == result[i].expressions.happy) express = "Happy";
-      else if (max == result[i].expressions.neutral) express = "Neutral";
-      else if (max == result[i].expressions.sad) express = "Sad";
-      else if (max == result[i].expressions.surprised) express = "Surprised";
+      switch (max) {
+        case result[i].expressions.angry:
+          express = "Angry";
+          break;
+        case result[i].expressions.disgusted:
+          express = "Disgusted";
+          break;
+        case result[i].expressions.fearful:
+          express = "Fearful";
+          break;
+        case result[i].expressions.happy:
+          express = "Happy";
+          break;
+        case result[i].expressions.neutral:
+          express = "Neutral";
+          break;
+        case result[i].expressions.sad:
+          express = "Sad";
+          break;
+        case result[i].expressions.surprised:
+          express = "Surprised";
+          break;
+        default:
+          express = "No emotion";
+          break;
+      }
 
       var obj1 = new obj(imageObject, express, result[i].age, result[i].gender);
       const len = data.push(obj1);
