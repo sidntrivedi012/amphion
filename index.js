@@ -1,9 +1,8 @@
-// import Cropper from "./node_modules/cropperjs/dist/";
 const uploadedimage = document.getElementById("imageUpload");
 var data = [];
 
 function obj(imageObject, emotion, age, sex) {
-  this.imageObject = imageObject;
+  this.image_base64 = imageObject;
   this.emotion = emotion;
   this.age = age;
   this.sex = sex;
@@ -21,6 +20,7 @@ async function detectFaces() {
   const container = document.createElement("div");
   container.style.position = "relative";
   document.body.append(container);
+
   //loading the models
   document.body.append("Loaded the models. Please upload the file.");
   uploadedimage.addEventListener("change", async () => {
@@ -34,11 +34,7 @@ async function detectFaces() {
       .withAgeAndGender()
       .withFaceDescriptors();
 
-    //console.log(result);
-
     const canvas1 = faceapi.createCanvasFromMedia(image);
-    console.log(canvas1);
-
     container.append(canvas1);
 
     for (let i = 0; i < result.length; i++) {
@@ -54,13 +50,12 @@ async function detectFaces() {
       // to extract face regions from bounding boxes
       let canvas2 = await faceapi.extractFaces(canvas1, regionsToExtract);
       container.append(canvas2[0]);
-      console.log(canvas2);
-      //face extracted, now opening them in new tabs for saving
-      let d = canvas2[0].toDataURL("image/png");
-      var w = window.open(d);
-      w.document.write("<img src='" + d + "' alt='from canvas'/>");
 
-      const imageObject = result[i].detection;
+      //face extracted, now opening them in new tabs for saving
+      let imageData = canvas2[0].toDataURL("image/png");
+      var w = window.open(imageData);
+      w.document.write("<img src='" + imageData + "' alt='from canvas'/>");
+
       let arr = Object.values(result[i].expressions);
       let max = Math.max(...arr);
       switch (max) {
@@ -90,7 +85,7 @@ async function detectFaces() {
           break;
       }
 
-      var obj1 = new obj(imageObject, express, result[i].age, result[i].gender);
+      var obj1 = new obj(imageData, express, result[i].age, result[i].gender);
       const len = data.push(obj1);
     }
     console.log(data);
