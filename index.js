@@ -1,3 +1,4 @@
+// import Cropper from "./node_modules/cropperjs/dist/";
 const uploadedimage = document.getElementById("imageUpload");
 var data = [];
 
@@ -17,6 +18,10 @@ Promise.all([
 ]).then(detectFaces);
 
 async function detectFaces() {
+  const container = document.createElement("div");
+  container.style.position = "relative";
+  document.body.append(container);
+  //loading the models
   document.body.append("Loaded the models. Please upload the file.");
   uploadedimage.addEventListener("change", async () => {
     // create an HTMLImageElement from a Blob
@@ -29,9 +34,32 @@ async function detectFaces() {
       .withAgeAndGender()
       .withFaceDescriptors();
 
-    console.log(result);
+    //console.log(result);
+
+    const canvas1 = faceapi.createCanvasFromMedia(image);
+    console.log(canvas1);
+
+    container.append(canvas1);
 
     for (let i = 0; i < result.length; i++) {
+      //face params
+      const regionsToExtract = [
+        new faceapi.Rect(
+          result[i].detection._box._x,
+          result[i].detection._box._y,
+          result[i].detection._box._width,
+          result[i].detection._box._height
+        )
+      ];
+      // to extract face regions from bounding boxes
+      let canvas2 = await faceapi.extractFaces(canvas1, regionsToExtract);
+      container.append(canvas2[0]);
+      console.log(canvas2);
+      //face extracted, now opening them in new tabs for saving
+      let d = canvas2[0].toDataURL("image/png");
+      var w = window.open(d);
+      w.document.write("<img src='" + d + "' alt='from canvas'/>");
+
       const imageObject = result[i].detection;
       let arr = Object.values(result[i].expressions);
       let max = Math.max(...arr);
