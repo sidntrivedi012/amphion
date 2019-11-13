@@ -35,7 +35,6 @@ async function detectFaces() {
       .withFaceDescriptors();
 
     const canvas1 = faceapi.createCanvasFromMedia(image);
-    container.append(canvas1);
 
     for (let i = 0; i < result.length; i++) {
       //face params
@@ -52,9 +51,9 @@ async function detectFaces() {
       container.append(canvas2[0]);
 
       //face extracted, now opening them in new tabs for saving
-      let imageData = canvas2[0].toDataURL("image/png");
-      var w = window.open(imageData);
-      w.document.write("<img src='" + imageData + "' alt='from canvas'/>");
+      let imageData = canvas2[0]
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream");
 
       let arr = Object.values(result[i].expressions);
       let max = Math.max(...arr);
