@@ -23,10 +23,8 @@ async function detectFaces() {
   container.style.position = "relative";
   document.body.append(container);
 
-  //loading the models
   document.body.append("Loaded the models. Please upload the file.");
   uploadedimage.addEventListener("change", async () => {
-    // create an HTMLImageElement from a Blob
     const image = await faceapi.bufferToImage(uploadedimage.files[0]);
 
     const result = await faceapi
@@ -39,7 +37,6 @@ async function detectFaces() {
     const canvas1 = faceapi.createCanvasFromMedia(image);
 
     for (let i = 0; i < result.length; i++) {
-      //face params to extract
       const regionsToExtract = [
         new faceapi.Rect(
           result[i].detection._box._x,
@@ -48,11 +45,9 @@ async function detectFaces() {
           result[i].detection._box._height
         )
       ];
-      // to extract face regions from bounding boxes
       let canvas2 = await faceapi.extractFaces(canvas1, regionsToExtract);
       container.append(canvas2[0]);
 
-      //face extracted, now opening them for saving
       let imageData = canvas2[0]
         .toDataURL("image/png")
         .replace("image/png", "image/octet-stream");
