@@ -3,11 +3,11 @@ var data = [];
 
 // console.log(faceapi);
 
-function obj(imageObject, emotion, age, sex) {
+function obj(imageObject, emotion, age, gender) {
   this.image_base64 = imageObject;
   this.emotion = emotion;
   this.age = age;
-  this.sex = sex;
+  this.gender = gender;
 }
 
 Promise.all([
