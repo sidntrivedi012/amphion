@@ -1,6 +1,8 @@
 const uploadedimage = document.getElementById("imageUpload");
 var data = [];
 
+// console.log(faceapi);
+
 function obj(imageObject, emotion, age, sex) {
   this.image_base64 = imageObject;
   this.emotion = emotion;
@@ -37,20 +39,20 @@ async function detectFaces() {
     const canvas1 = faceapi.createCanvasFromMedia(image);
 
     for (let i = 0; i < result.length; i++) {
-      //face params
+      //face params to extract
       const regionsToExtract = [
         new faceapi.Rect(
-          result[i].detection._box._x,
-          result[i].detection._box._y,
-          result[i].detection._box._width,
-          result[i].detection._box._height
+          result[i].detection._box._x - 50,
+          result[i].detection._box._y - 80,
+          result[i].detection._box._width + 100,
+          result[i].detection._box._height + 100
         )
       ];
       // to extract face regions from bounding boxes
       let canvas2 = await faceapi.extractFaces(canvas1, regionsToExtract);
       container.append(canvas2[0]);
 
-      //face extracted, now opening them in new tabs for saving
+      //face extracted, now opening them for saving
       let imageData = canvas2[0]
         .toDataURL("image/png")
         .replace("image/png", "image/octet-stream");
@@ -83,7 +85,6 @@ async function detectFaces() {
           express = "No emotion";
           break;
       }
-
       var obj1 = new obj(imageData, express, result[i].age, result[i].gender);
       const len = data.push(obj1);
     }
