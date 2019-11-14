@@ -1,6 +1,6 @@
 # amphion
 
-> A WIP simple face extraction module built on tensorflow.js(face-api.js).
+> A WIP simple face extraction module built on tensorflow.js.
 
 ## Usage
 
