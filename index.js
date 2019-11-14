@@ -42,10 +42,10 @@ async function detectFaces() {
       //face params to extract
       const regionsToExtract = [
         new faceapi.Rect(
-          result[i].detection._box._x - 50,
-          result[i].detection._box._y - 80,
-          result[i].detection._box._width + 100,
-          result[i].detection._box._height + 100
+          result[i].detection._box._x,
+          result[i].detection._box._y - 50,
+          result[i].detection._box._width + 5,
+          result[i].detection._box._height + 75
         )
       ];
       // to extract face regions from bounding boxes
